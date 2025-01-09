@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Nuevo álbum
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label>Título:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.titulo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Artista:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.artista"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Año:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.anho"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Género:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.genero"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Portada:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.portada"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Pistas:</ion-label>
+    <ion-input [(ngModel)]="albumEditando.pistas"></ion-input>
+  </ion-item>
+
+  <ion-button (click)="clicBotonInsertar()">Añadir álbum</ion-button>
+
+  <h1>LISTA DE ÁLBUMES</h1>
+  <ion-list>
+    <ion-item *ngFor="let documentAlbum of arrayColeccionAlbumes">
+      <ion-grid>
+        <ion-row>
+          <h2>{{documentAlbum.data.titulo}}</h2>
+        </ion-row>
+        <ion-row>
+          <p>{{documentAlbum.data.artista}}</p>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+  
+</ion-content>

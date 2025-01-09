@@ -1,0 +1,7 @@
+{
+  "name": "albumes-firestore",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
