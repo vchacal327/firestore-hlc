@@ -70,4 +70,4 @@ testem.log
 Thumbs.db
 
 # Private
-.src/environments/environment.ts
+.environment.ts
