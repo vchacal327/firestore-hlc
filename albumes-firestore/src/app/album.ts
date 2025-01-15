@@ -1,8 +1,7 @@
 export interface Album {
-    id: number;
     titulo: string;
     artista: string;
-    anho: number;
+    anho: string;
     genero: string;
     portada: string;
     pistas: Pista[];
