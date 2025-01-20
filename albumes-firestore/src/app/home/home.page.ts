@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FirestoreService } from '../firestore.service';
 import { Album, Pista } from '../album';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,7 @@ export class HomePage {
   // ID del álbum seleccionado (para editar o borrar)
   idAlbumSelec: any;
 
-  constructor(private firestoreService: FirestoreService) {
+  constructor(private firestoreService: FirestoreService, private router: Router) {
     // Crear un álbum vacío con un arreglo de pistas
     this.albumEditando = {
       titulo: ' ',
@@ -120,6 +121,8 @@ export class HomePage {
     this.albumEditando.genero = albumSelec.data.genero;
     this.albumEditando.portada = albumSelec.data.portada;
     this.albumEditando.pistas = albumSelec.data.pistas || [];
+
+    this.router.navigate(['/detalle', this.idAlbumSelec]);
   }
 
   // Borrar un álbum seleccionado
