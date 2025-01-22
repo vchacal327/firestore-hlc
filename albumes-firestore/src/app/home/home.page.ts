@@ -124,34 +124,4 @@ export class HomePage {
 
     this.router.navigate(['/detalle', this.idAlbumSelec]);
   }
-
-  // Borrar un álbum seleccionado
-  clicBotonBorrar() {
-    if (this.idAlbumSelec) {
-      this.firestoreService.borrar('albumes', this.idAlbumSelec).then(() => {
-        console.log('Álbum borrado de Firestore');
-        // Actualizar la lista
-        this.obtenerListaAlbumes();
-        // Limpiar el formulario
-        this.albumEditando = {
-          titulo: '',
-          artista: '',
-          anho: '',
-          genero: '',
-          portada: '',
-          pistas: []
-        };
-      });
-    }
-  }
-
-
-  clicBotonModificar() {
-    this.firestoreService.actualizar("albumes", this.idAlbumSelec, this.albumEditando).then(() => {
-      // Actualizar la lista completa
-      this.obtenerListaAlbumes();
-      // Limpiar datos de pantalla
-      this.albumEditando = {} as Album;
-    })
-  }
 }

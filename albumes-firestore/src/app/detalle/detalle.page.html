@@ -6,4 +6,13 @@
 
 <ion-content [fullscreen]="true">
   <p>{{ id }}</p>
+  <p>Título: {{ document.data.titulo }}</p>
+
+  <ion-button color="danger" (click)="clicBotonBorrar()">
+    Borrar álbum
+  </ion-button>
+
+  <ion-button (click)="clicBotonModificar()">
+    Modificar álbum
+  </ion-button>
 </ion-content>
