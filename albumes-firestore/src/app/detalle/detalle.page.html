@@ -1,12 +1,50 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>detalle</ion-title>
+    <ion-title>Detalles</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <p>{{ id }}</p>
-  <p>Título: {{ document.data.titulo }}</p>
+<ion-content [fullscreen]="true">  
+
+  <!-- Campos del Álbum -->
+   <ion-item>
+    <ion-label>ID:</ion-label>
+    <ion-input [value]="document.id" readonly="true"></ion-input>
+   </ion-item>
+   <ion-item>
+    <ion-label>Título:</ion-label>
+    <ion-input [(ngModel)]=document.data.titulo></ion-input>
+   </ion-item>
+   <ion-item>
+    <ion-label>Año:</ion-label>
+    <ion-input [(ngModel)]=document.data.anho></ion-input>
+   </ion-item>
+   <ion-item>
+    <ion-label>Género:</ion-label>
+    <ion-input [(ngModel)]=document.data.genero></ion-input>
+   </ion-item>
+
+  <!-- Campos para una nueva pista -->
+  <ion-item>
+    <ion-label position="floating">Título de la pista</ion-label>
+    <ion-input [(ngModel)]="document.nuevaPista.titulo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Duración de la pista</ion-label>
+    <ion-input [(ngModel)]="document.nuevaPista.duracion"></ion-input>
+  </ion-item>
+
+  <!-- Listado de pistas actuales en albumEditando -->
+  <ion-list>
+    <ion-item *ngFor="let pista of albumEditando.pistas; let i = index">
+      <ion-label>
+        {{ pista.id }} - {{ pista.titulo }} ({{ pista.duracion }})
+      </ion-label>
+      <ion-button color="danger" (click)="eliminarPista(i)">Eliminar</ion-button>
+    </ion-item>
+  </ion-list>
+ <!-- <ion-button expand="block" (click)="agregarPista()">Agregar pista</ion-button> -->
+
 
   <ion-button color="danger" (click)="clicBotonBorrar()">
     Borrar álbum

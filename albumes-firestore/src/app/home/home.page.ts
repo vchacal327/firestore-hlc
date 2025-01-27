@@ -39,7 +39,6 @@ export class HomePage {
       artista: ' ',
       anho: ' ',
       genero: ' ',
-      portada: ' ',
       pistas: []
     };
 
@@ -99,7 +98,6 @@ export class HomePage {
         artista: '',
         anho: '',
         genero: '',
-        portada: '',
         pistas: []
       };
       // Resetear el contador
@@ -119,7 +117,6 @@ export class HomePage {
     this.albumEditando.artista = albumSelec.data.artista;
     this.albumEditando.anho = albumSelec.data.anho;
     this.albumEditando.genero = albumSelec.data.genero;
-    this.albumEditando.portada = albumSelec.data.portada;
     this.albumEditando.pistas = albumSelec.data.pistas || [];
 
     this.router.navigate(['/detalle', this.idAlbumSelec]);

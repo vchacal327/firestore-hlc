@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Album } from '../album';
+import { Album, Pista } from '../album';
 import { FirestoreService } from '../firestore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-detalle',
@@ -17,7 +18,7 @@ export class DetallePage implements OnInit {
     data: {} as Album
   };
 
-  constructor(private activatedRoute: ActivatedRoute, private firestoreService: FirestoreService) { }
+  constructor(private activatedRoute: ActivatedRoute, private firestoreService: FirestoreService, private router: Router) { }
 
   ngOnInit() {
     let idRecibido = this.activatedRoute.snapshot.paramMap.get('id');
@@ -40,32 +41,65 @@ export class DetallePage implements OnInit {
     });
   }
 
+  /*
+  // Pista temporal antes de agregarse al álbum
+  nuevaPista: Pista = {
+    id: 0,
+    titulo: '',
+    duracion: ''
+  };
+
+  // Contador para asignar ID único a cada pista localmente
+  pistaCounter: number = 1;
+
+  // Al hacer clic en “Agregar pista” en el formulario
+  agregarPista() {
+    // Crear una copia de nuevaPista asignando un ID incremental
+    const pistaAInsertar: Pista = {
+      id: this.pistaCounter,
+      titulo: this.nuevaPista.titulo,
+      duracion: this.nuevaPista.duracion
+    };
+
+    // Agregar al array de pistas del álbum
+    this.albumEditando.pistas.push(pistaAInsertar);
+
+    // Incrementar contador para la siguiente pista
+    this.pistaCounter++;
+
+    // Limpiar el formulario de pista
+    this.nuevaPista = {
+      id: 0,
+      titulo: '',
+      duracion: ''
+    };
+
+    // Elimina una pista por índice dentro del array
+    eliminarPista(indice: number) {
+    this.albumEditando.pistas.splice(indice, 1);
+  }
+  }
+    */
+
   // Borrar un álbum seleccionado
   clicBotonBorrar() {
-    if (this.idAlbumSelec) {
-      this.firestoreService.borrar('albumes', this.idAlbumSelec).then(() => {
+
+    // Añadir confirmación
+    if (confirm('¿Eliminar el álbum?')) {
+
+      this.firestoreService.borrar('albumes', this.document.id).then(() => {
         console.log('Álbum borrado de Firestore');
         // Actualizar la lista
-        this.obtenerListaAlbumes();
-        // Limpiar el formulario
-        this.albumEditando = {
-          titulo: '',
-          artista: '',
-          anho: '',
-          genero: '',
-          portada: '',
-          pistas: []
-        };
+        this.router.navigate(['/home']);
       });
     }
   }
 
   clicBotonModificar() {
-    this.firestoreService.actualizar("albumes", this.idAlbumSelec, this.albumEditando).then(() => {
-      // Actualizar la lista completa
-      this.obtenerListaAlbumes();
-      // Limpiar datos de pantalla
-      this.albumEditando = {} as Album;
+    this.firestoreService.actualizar("albumes", this.document.id, this.document.data).then(() => {
+
+      console.log('Álbum modificado correctamente');
+      this.router.navigate(['/home']);
     })
   }
 }
