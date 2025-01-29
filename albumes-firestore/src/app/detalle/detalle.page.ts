@@ -40,8 +40,7 @@ export class DetallePage implements OnInit {
       }
     });
   }
-
-  /*
+  
   // Pista temporal antes de agregarse al álbum
   nuevaPista: Pista = {
     id: 0,
@@ -51,6 +50,9 @@ export class DetallePage implements OnInit {
 
   // Contador para asignar ID único a cada pista localmente
   pistaCounter: number = 1;
+
+  // ID del álbum seleccionado (para editar o borrar)
+  idAlbumSelec: any;
 
   // Al hacer clic en “Agregar pista” en el formulario
   agregarPista() {
@@ -62,7 +64,7 @@ export class DetallePage implements OnInit {
     };
 
     // Agregar al array de pistas del álbum
-    this.albumEditando.pistas.push(pistaAInsertar);
+    this.document.data.pistas.push(pistaAInsertar);
 
     // Incrementar contador para la siguiente pista
     this.pistaCounter++;
@@ -73,13 +75,12 @@ export class DetallePage implements OnInit {
       titulo: '',
       duracion: ''
     };
+  }
 
-    // Elimina una pista por índice dentro del array
-    eliminarPista(indice: number) {
-    this.albumEditando.pistas.splice(indice, 1);
+  // Elimina una pista por índice dentro del array
+  eliminarPista(indice: number) {
+    this.document.data.pistas.splice(indice, 1);
   }
-  }
-    */
 
   // Borrar un álbum seleccionado
   clicBotonBorrar() {

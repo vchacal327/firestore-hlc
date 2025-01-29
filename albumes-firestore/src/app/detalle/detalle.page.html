@@ -24,26 +24,26 @@
     <ion-input [(ngModel)]=document.data.genero></ion-input>
    </ion-item>
 
-  <!-- Campos para una nueva pista -->
+   <!-- Campos para una nueva pista -->
   <ion-item>
     <ion-label position="floating">Título de la pista</ion-label>
-    <ion-input [(ngModel)]="document.nuevaPista.titulo"></ion-input>
+    <ion-input [(ngModel)]="nuevaPista.titulo"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label position="floating">Duración de la pista</ion-label>
-    <ion-input [(ngModel)]="document.nuevaPista.duracion"></ion-input>
+    <ion-input [(ngModel)]="nuevaPista.duracion"></ion-input>
   </ion-item>
+  <ion-button expand="block" (click)="agregarPista()">Agregar pista</ion-button>
 
-  <!-- Listado de pistas actuales en albumEditando -->
+  <!-- Listado de pistas actuales en document -->
   <ion-list>
-    <ion-item *ngFor="let pista of albumEditando.pistas; let i = index">
+    <ion-item *ngFor="let pista of document.data.pistas; let i = index">
       <ion-label>
         {{ pista.id }} - {{ pista.titulo }} ({{ pista.duracion }})
       </ion-label>
       <ion-button color="danger" (click)="eliminarPista(i)">Eliminar</ion-button>
     </ion-item>
   </ion-list>
- <!-- <ion-button expand="block" (click)="agregarPista()">Agregar pista</ion-button> -->
 
 
   <ion-button color="danger" (click)="clicBotonBorrar()">

@@ -32,6 +32,8 @@ export class HomePage {
   // ID del álbum seleccionado (para editar o borrar)
   idAlbumSelec: any;
 
+  palabra: any;
+
   constructor(private firestoreService: FirestoreService, private router: Router) {
     // Crear un álbum vacío con un arreglo de pistas
     this.albumEditando = {
@@ -112,13 +114,13 @@ export class HomePage {
     console.log('Álbum seleccionado:', albumSelec);
     this.idAlbumSelec = albumSelec.id;
 
-    // Rellenar los campos con la info del álbum seleccionado
-    this.albumEditando.titulo = albumSelec.data.titulo;
-    this.albumEditando.artista = albumSelec.data.artista;
-    this.albumEditando.anho = albumSelec.data.anho;
-    this.albumEditando.genero = albumSelec.data.genero;
-    this.albumEditando.pistas = albumSelec.data.pistas || [];
-
     this.router.navigate(['/detalle', this.idAlbumSelec]);
+  }
+
+  selecElemento(albumSelec: any) {
+    console.log('Álbum seleccionado:', albumSelec);
+    this.palabra = albumSelec.titulo;
+
+    this.router.navigate(['/detalle', this.palabra]);
   }
 }
