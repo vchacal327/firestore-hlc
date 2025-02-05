@@ -1,12 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Nuevo álbum</ion-title>
+    <ion-title>LISTA DE ÁLBUMES</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
 
-  <h1>LISTA DE ÁLBUMES</h1>
   <ion-list>
     <ion-item *ngFor="let documentAlbum of arrayColeccionAlbumes" (click)="selecAlbum(documentAlbum)">
       <ion-grid>
@@ -28,11 +27,9 @@
     </ion-item>
   </ion-list>
 
-  <br>
-  <ion-fab>
-    <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <ion-fab-button (click)="nuevoAlbum()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+
 
 </ion-content>

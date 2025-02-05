@@ -123,4 +123,8 @@ export class HomePage {
 
     this.router.navigate(['/detalle', this.palabra]);
   }
+
+  nuevoAlbum() {
+    this.router.navigate(['/detalle', 'nuevo']);
+  }
 }

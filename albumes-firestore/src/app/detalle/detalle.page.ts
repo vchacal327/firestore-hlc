@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Album, Pista } from '../album';
 import { FirestoreService } from '../firestore.service';
 import { Router } from '@angular/router';
+import { AlertController, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-detalle',
@@ -11,6 +12,8 @@ import { Router } from '@angular/router';
 })
 export class DetallePage implements OnInit {
 
+  isNew: boolean = false;
+
   id: string = "";
 
   document: any = {
@@ -18,9 +21,11 @@ export class DetallePage implements OnInit {
     data: {} as Album
   };
 
-  constructor(private activatedRoute: ActivatedRoute, private firestoreService: FirestoreService, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private firestoreService: FirestoreService, private router: Router, private alertController: AlertController) { }
 
   ngOnInit() {
+
+    // Para que el id no sea null:
     let idRecibido = this.activatedRoute.snapshot.paramMap.get('id');
     if (idRecibido != null) {
       this.id = idRecibido;
@@ -28,19 +33,46 @@ export class DetallePage implements OnInit {
       this.id = "";
     }
 
-    this.firestoreService.consultarPorId("albumes", this.id).subscribe((resultado: any) => {
+    // Obtenemos el parámetro de la ruta
+    const paramRecibido = this.activatedRoute.snapshot.paramMap.get('id');
 
-      if (resultado.payload.data() != null) {
-        this.document.id = resultado.payload.id;
-        this.document.data = resultado.payload.data();
+    if (paramRecibido === 'nuevo') {
+      // MODO: NUEVO
+      this.isNew = true;
+      // Inicializa campos vacíos
+      this.document.id = '';
+      this.document.data = {
+        titulo: '',
+        artista: '',
+        anho: '',
+        genero: '',
+        portada: '',
+        pistas: []
+      };
 
-        console.log(this.document.data.titulo);
-      } else {
-        this.document.data = {} as Album;
+    } else {
+      // MODO: EDICIÓN
+      this.isNew = false;
+      this.id = paramRecibido || '';
+
+      // Cargar datos desde Firestore con el ID
+      if (this.id) {
+        this.firestoreService.consultarPorId('albumes', this.id)
+          .subscribe((resultado: any) => {
+            if (resultado.payload.data()) {
+              this.document.id = resultado.payload.id;
+              this.document.data = resultado.payload.data() as Album;
+              console.log("Álbum cargado:", this.document.data);
+              // Asegurar que tenga array de pistas
+              if (!this.document.data.pistas) {
+                this.document.data.pistas = [];
+              }
+            }
+          });
       }
-    });
+    }
   }
-  
+
   // Pista temporal antes de agregarse al álbum
   nuevaPista: Pista = {
     id: 0,
@@ -83,25 +115,45 @@ export class DetallePage implements OnInit {
   }
 
   // Borrar un álbum seleccionado
-  clicBotonBorrar() {
+  async clicBotonBorrar() {
+    if (!this.isNew) {
 
-    // Añadir confirmación
-    if (confirm('¿Eliminar el álbum?')) {
-
-      this.firestoreService.borrar('albumes', this.document.id).then(() => {
-        console.log('Álbum borrado de Firestore');
-        // Actualizar la lista
-        this.router.navigate(['/home']);
+      const alert = await this.alertController.create({
+        header: '¿Eliminar álbum?',
+        message: 'No podrás recuperarlo más tarde.',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Eliminar',
+            handler: () => this.firestoreService.borrar('albumes', this.document.id).then(() => {
+              console.log('Álbum borrado de Firestore');
+              // Actualizar la lista
+              this.router.navigate(['/home']);
+            })
+          }
+        ]
       });
+      await alert.present();
     }
   }
 
   clicBotonModificar() {
-    this.firestoreService.actualizar("albumes", this.document.id, this.document.data).then(() => {
+    if (this.isNew) {
+      this.firestoreService.insertar('albumes', this.document.data).then(() => {
+        console.log('Álbum creado en Firestore');
+        this.router.navigate(['/home']);
+      });
 
-      console.log('Álbum modificado correctamente');
-      this.router.navigate(['/home']);
-    })
+    } else {
+      this.firestoreService.actualizar("albumes", this.document.id, this.document.data).then(() => {
+
+        console.log('Álbum modificado correctamente');
+        this.router.navigate(['/home']);
+      });
+    }
   }
 }
 
