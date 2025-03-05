@@ -41,6 +41,7 @@ export class HomePage {
       artista: ' ',
       anho: ' ',
       genero: ' ',
+      portada: ' ',
       pistas: []
     };
 
@@ -100,6 +101,7 @@ export class HomePage {
         artista: '',
         anho: '',
         genero: '',
+        portada: '',
         pistas: []
       };
       // Resetear el contador

@@ -4,6 +4,8 @@ import { Album, Pista } from '../album';
 import { FirestoreService } from '../firestore.service';
 import { Router } from '@angular/router';
 import { AlertController, IonButton } from '@ionic/angular/standalone';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { ImagePicker } from '@awesome-cordova-plugins/image-picker/ngx';
 
 @Component({
   selector: 'app-detalle',
@@ -21,7 +23,13 @@ export class DetallePage implements OnInit {
     data: {} as Album
   };
 
-  constructor(private activatedRoute: ActivatedRoute, private firestoreService: FirestoreService, private router: Router, private alertController: AlertController) { }
+  constructor(private activatedRoute: ActivatedRoute,
+    private firestoreService: FirestoreService,
+    private router: Router,
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    private imagePicker: ImagePicker) { }
 
   ngOnInit() {
 
@@ -155,6 +163,82 @@ export class DetallePage implements OnInit {
       });
     }
   }
+
+  imagenSelec: string = "";
+  async seleccionarImagen() {
+    // Comprobar si la aplicación tiene permisos de lectura
+    this.imagePicker.hasReadPermission().then(
+      (result) => {
+        // Si no tiene permisos, solicitarlos
+        if (result == false) {
+          this.imagePicker.requestReadPermission();
+        }
+        else {
+          // Abrir selector de imágenes
+          this.imagePicker.getPictures({
+            maximumImagesCount: 1,
+            outputType: 1
+          }).then(
+            (results) => {
+              if (results.length > 0) {
+                this.imagenSelec = 'data:image/jpeg;base64,' + results[0];
+                console.log("Imagen que se ha seleccionado (en Base64): " + this.imagenSelec);
+              }
+            },
+            (err) => {
+              console.log(err)
+            }
+          );
+        }
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+  async subirImagen() {
+    // Mensaje de espera mientras se sube la imagen
+    const loading = await this.loadingController.create({
+      message: 'Subiendo imagen...'
+    });
+    // Mensaje de finalización de subida de la imagen
+    const toast = await this.toastController.create({
+      message: 'Imagen subida correctamente',
+      duration: 3000
+    });
+
+    // Carpeta del Storage donde se almacenará la imagen
+    let nombreCarpeta = "imagenes-victorchacon";
+
+    // Mostrar mensaje de espera
+    loading.present();
+    // Asignar el nombre de la imagen en función de la hora actual para
+    // evitar duplicidades de nombres
+    let nombreImagen = `${new Date().getTime()}`;
+    // Llamar al método que sube la imagen al Storage
+    this.firestoreService.subirImagenBase64(nombreCarpeta, nombreImagen, this.imagenSelec)
+      .then(snapshot => {
+        snapshot.ref.getDownloadURL()
+          .then(downloadURL => {
+            console.log('URL de descarga: ' + downloadURL);
+            this.document.data.portada = downloadURL;
+            // Mostrar mensaje de finalización
+            toast.present();
+            // Ocultar mensaje de espera
+            loading.dismiss();
+          })
+      })
+  }
+
+  async eliminarArchivo(fileUrl:string) {
+    const toast = await this.toastController.create({
+      message: 'Imagen eliminada correctamente',
+      duration: 3000
+    });
+    this.firestoreService.eliminarArchivoPorURL(fileUrl)
+    .then(() => {
+      toast.present();
+    }, (err) => {
+      console.log(err);
+    });
+  }
 }
-
-

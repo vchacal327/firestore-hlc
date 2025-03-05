@@ -3,6 +3,7 @@ export interface Album {
     artista: string;
     anho: string;
     genero: string;
+    portada: string;
     pistas: Pista[];
 }
 
