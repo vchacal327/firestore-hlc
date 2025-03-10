@@ -32,11 +32,37 @@
     &nbsp;
     <ion-input [(ngModel)]=document.data.genero></ion-input>
    </ion-item>
-   <ion-item>
+
+  <!-- Previsualización -->
+  <ion-item *ngIf="document.data.portada">
     <ion-label>Portada:</ion-label>
-    &nbsp;
-    <ion-input [(ngModel)]=document.data.portada></ion-input>
-   </ion-item>
+    <ion-item>
+      &nbsp;
+      <!-- Botón para seleccionar imagen -->
+      <ion-button (click)="seleccionarImagen()">
+        Elegir imagen
+      </ion-button>
+    </ion-item>
+  </ion-item>
+  <ion-img 
+    *ngIf="document.data.portada" 
+    [src]="document.data.portada" 
+    style="display: block;
+    margin-left: 0;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;">
+  </ion-img>
+
+  <!-- Previsualización de la imagen recién seleccionada (si existe) -->
+  <ion-item *ngIf="imagenSelec">
+    <ion-label>Nueva imagen (Base64):</ion-label>
+  </ion-item>
+  <ion-img 
+    *ngIf="imagenSelec" 
+    [src]="imagenSelec"
+    style="width: 200px; height: 200px; object-fit: cover; margin: 0 auto;">
+  </ion-img>
 
    <!-- Campos para una nueva pista -->
   <ion-item>

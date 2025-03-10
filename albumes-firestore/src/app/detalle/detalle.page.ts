@@ -164,7 +164,7 @@ export class DetallePage implements OnInit {
     }
   }
 
-  imagenSelec: string = "";
+  imagenSelec: string = '';
   async seleccionarImagen() {
     // Comprobar si la aplicación tiene permisos de lectura
     this.imagePicker.hasReadPermission().then(
